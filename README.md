@@ -1,6 +1,7 @@
 # Gitbook Sync Dir Action
 
-Synchronizes a repository directory to a cloud-based [Gitbook](https://www.gitbook.com/) space.
+Synchronizes markdown files of repository directory to a cloud-based [Gitbook](https://www.gitbook.com/) space.
+Uses filename as document title. Does not support sub-directories.
 
 ## Usage
 Create a github workflow in the `.github` folder, e.g. `.github/workflows/gitbook.yml`:
@@ -20,6 +21,7 @@ jobs:
         with:
           token: ${{ secret.GITBOOK_TOKEN }}
           dir: doc/adr
+          org: mineko
           space: foo-bar
           group: ADRs
 ```
@@ -29,6 +31,8 @@ jobs:
 ### `token`
 
 ### `dir`
+
+### `org`
 
 ### `space`
 
