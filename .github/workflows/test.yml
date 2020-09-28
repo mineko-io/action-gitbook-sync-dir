@@ -21,4 +21,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          milliseconds: 1000
+          token: 'my-test-token'
+          dir: 'doc/adrs'
+          org: 'mineko'
+          space: 'foo-bar'
