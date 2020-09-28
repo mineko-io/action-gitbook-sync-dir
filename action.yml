@@ -1,11 +1,26 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'action-gitbook-sync-dir'
+description: 'synchronizes markdown files of repository directory to a cloud-based gitbook space'
+author: 'Mineko GmbH'
 inputs:
-  milliseconds: # change this
+  token:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'gitbook access token'
+  org:
+    required: true
+    description: 'organization title'
+  space:
+    required: true
+    description: 'space name'
+  dir:
+    required: true
+    description: 'repository directory to sync'
+  apiEndpoint:
+    required: false
+    description: 'endpoint to gitbook api'
+    default: 'https://api-beta.gitbook.com/v1'
+  group:
+    required: false
+    description: 'optional name of group to create / sync pages under'
 runs:
   using: 'node12'
   main: 'dist/index.js'
