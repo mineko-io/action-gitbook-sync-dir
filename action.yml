@@ -1,6 +1,9 @@
 name: 'action-gitbook-sync-dir'
 description: 'synchronizes markdown files of repository directory to a cloud-based gitbook space'
 author: 'Mineko GmbH'
+branding:
+  icon: 'book'
+  color: 'green'
 inputs:
   token:
     required: true
