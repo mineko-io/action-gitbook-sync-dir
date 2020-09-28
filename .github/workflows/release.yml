@@ -1,0 +1,36 @@
+name: Release
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  default:
+    if: "!contains(github.event.head_commit.message, 'chore(release)')" # don't run if it is a release commit
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: 'Bump version and push tag'
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@v3.3.0
+        with:
+          github-token: ${{ github.token }}
+          skip-on-empty: 'true'
+          git-message: 'chore(release): {version}'
+          tag-prefix: 'v'
+
+      - name: 'Create Release on Github'
+        id: create_release
+        if: ${{ steps.changelog.outputs.skipped == 'false'}}
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          tag_name: ${{ steps.changelog.outputs.tag }}
+          release_name: ${{ steps.changelog.outputs.tag }}
+          body: ${{ steps.changelog.outputs.clean_changelog }}
+          draft: false
+          prerelease: false
