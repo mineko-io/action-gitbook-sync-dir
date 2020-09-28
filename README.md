@@ -24,16 +24,25 @@ jobs:
           org: mineko
           space: foo-bar
           group: ADRs
+          apiEndpoint: https://api-beta.gitbook.com/v1
 ```
 
 ## Inputs
 
 ### `token`
+gitbook access token
 
 ### `dir`
+repository directory to sync
 
 ### `org`
+organization title
 
 ### `space`
+space name
+
+### `apiEndpoint`
+endpoint to gitbook api
 
 ### `group`
+optional name of group to create / sync pages under
