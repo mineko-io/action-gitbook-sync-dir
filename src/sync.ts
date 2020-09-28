@@ -6,16 +6,13 @@ export interface SyncRequest {
   dir: string
   org: string
   space: string
-  apiEndpoint?: string
+  apiEndpoint: string
   group?: string
 }
 
 export async function sync(request: SyncRequest): Promise<void> {
   const {token, dir, org, space, apiEndpoint, group} = request
-  const client = new GitBookAPI(
-    {token},
-    {host: apiEndpoint || 'https://api-beta.gitbook.com/v1'}
-  )
+  const client = new GitBookAPI({token}, {host: apiEndpoint})
 
   const organizations = await client.get('orgs')
 

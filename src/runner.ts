@@ -7,7 +7,7 @@ export async function run(): Promise<void> {
     const dir: string = core.getInput('dir', {required: true})
     const org: string = core.getInput('org', {required: true})
     const space: string = core.getInput('space', {required: true})
-    const apiEndpoint: string = core.getInput('apiEndpoint')
+    const apiEndpoint: string = core.getInput('apiEndpoint', {required: true})
     const group: string = core.getInput('group')
 
     core.debug(`Syncing ${dir} to space ${space} ...`)
