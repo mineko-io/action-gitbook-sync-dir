@@ -17,10 +17,10 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: wagoid/action-gitbook-sync-dir@v1
+      - uses: mineko-io/action-gitbook-sync-dir@v1
         with:
           token: ${{ secret.GITBOOK_TOKEN }}
-          dir: doc/adr
+          dir: doc/adrs
           org: mineko
           space: foo-bar
           group: ADRs
