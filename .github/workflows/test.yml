@@ -20,6 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./
+        continue-on-error: true
         with:
           token: 'my-test-token'
           dir: 'doc/adrs'
