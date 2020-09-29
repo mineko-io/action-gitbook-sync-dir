@@ -181,6 +181,7 @@ function sync(request) {
         if (group) {
             core.startGroup(`checking if group ${group} exists`);
             const groupUrl = group === null || group === void 0 ? void 0 : group.toLowerCase();
+            core.debug(`Requesting: ${syncUrl}${groupUrl}/`);
             let groupItem = yield client
                 .get(`${syncUrl}${groupUrl}/`)
                 .then((res) => {
@@ -216,6 +217,7 @@ function sync(request) {
             const fileUrl = file.split('.')[0];
             const content = fs_1.default.readFileSync(filePath, { encoding: 'utf-8' }).toString();
             core.info(`checking if file ${fileUrl} exists`);
+            core.debug(`Requesting: ${syncUrl}${fileUrl}/`);
             const existingFile = yield client
                 .get(`${syncUrl}${fileUrl}/`)
                 .then((res) => {

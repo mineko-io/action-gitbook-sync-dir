@@ -111,6 +111,7 @@ export async function sync(request: SyncRequest): Promise<void> {
     core.startGroup(`checking if group ${group} exists`)
     const groupUrl = group?.toLowerCase()
 
+    core.debug(`Requesting: ${syncUrl}${groupUrl}/`)
     let groupItem = await client
       .get<Item>(`${syncUrl}${groupUrl}/`)
       .then((res: AxiosResponse<Item>) => {
@@ -151,6 +152,7 @@ export async function sync(request: SyncRequest): Promise<void> {
       const content = fs.readFileSync(filePath, {encoding: 'utf-8'}).toString()
 
       core.info(`checking if file ${fileUrl} exists`)
+      core.debug(`Requesting: ${syncUrl}${fileUrl}/`)
       const existingFile = await client
         .get<Item>(`${syncUrl}${fileUrl}/`)
         .then((res: AxiosResponse<Item>) => {
