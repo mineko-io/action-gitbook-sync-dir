@@ -96,7 +96,7 @@ export async function sync(request: SyncRequest): Promise<void> {
   const {token, dir, org, space, apiEndpoint, group} = request
   const client = axios.create({
     baseURL: apiEndpoint,
-    timeout: 1000,
+    timeout: 10000,
     headers: {Authorization: `Bearer ${token}`}
   })
 
