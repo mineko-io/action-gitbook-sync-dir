@@ -400,7 +400,7 @@ test('synchronizes files and update existing ones', async () => {
   )
 
   const expectation1 = mockyeah
-    .put('v1/spaces/space-uid/content/v/master/url/foobargroup/001-file', {
+    .post('v1/spaces/space-uid/content/v/master/url/foobargroup/001-file', {
       json: {
         revision: '1'
       }
@@ -411,10 +411,7 @@ test('synchronizes files and update existing ones', async () => {
           {
             kind: 'document',
             url: '001-file',
-            title: '001 file',
-            document: {
-              markdown: 'content'
-            }
+            title: '001 file'
           }
         ]
       }

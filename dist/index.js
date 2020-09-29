@@ -212,7 +212,6 @@ function sync(request) {
         files.sort();
         yield Promise.all(files.map((file) => __awaiter(this, void 0, void 0, function* () {
             core.info(`start sync of file ${file}`);
-            let remoteFileUrl = syncUrl;
             const filePath = `${dir}/${file}`;
             const fileUrl = file.split('.')[0];
             const content = fs_1.default.readFileSync(filePath, { encoding: 'utf-8' }).toString();
@@ -228,22 +227,32 @@ function sync(request) {
                 core.info(`file ${fileUrl} doesn't exists`);
             });
             if (existingFile && existingFile.uid) {
-                core.info('file exist, updating it...');
-                remoteFileUrl = `${syncUrl}${fileUrl}`;
-            }
-            core.debug(`creating / updating file at url ${remoteFileUrl}`);
-            yield client.put(remoteFileUrl, {
-                pages: [
-                    {
-                        kind: 'document',
-                        url: fileUrl,
-                        title: fileUrl.replace(/-/g, ' '),
-                        document: {
-                            markdown: content
+                core.info('file exist, updating title (update of content currently not supported) ...');
+                yield client.post(`${syncUrl}${fileUrl}`, {
+                    pages: [
+                        {
+                            kind: 'document',
+                            url: fileUrl,
+                            title: fileUrl.replace(/-/g, ' ')
                         }
-                    }
-                ]
-            });
+                    ]
+                });
+            }
+            else {
+                core.debug(`creating file`);
+                yield client.put(syncUrl, {
+                    pages: [
+                        {
+                            kind: 'document',
+                            url: fileUrl,
+                            title: fileUrl.replace(/-/g, ' '),
+                            document: {
+                                markdown: content
+                            }
+                        }
+                    ]
+                });
+            }
         })));
         core.endGroup();
     });

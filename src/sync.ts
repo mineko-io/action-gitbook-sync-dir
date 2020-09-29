@@ -146,7 +146,6 @@ export async function sync(request: SyncRequest): Promise<void> {
   await Promise.all(
     files.map(async (file: string) => {
       core.info(`start sync of file ${file}`)
-      let remoteFileUrl = syncUrl
       const filePath = `${dir}/${file}`
       const fileUrl = file.split('.')[0]
       const content = fs.readFileSync(filePath, {encoding: 'utf-8'}).toString()
@@ -164,24 +163,35 @@ export async function sync(request: SyncRequest): Promise<void> {
         })
 
       if (existingFile && existingFile.uid) {
-        core.info('file exist, updating it...')
-        remoteFileUrl = `${syncUrl}${fileUrl}`
-      }
+        core.info(
+          'file exist, updating title (update of content currently not supported) ...'
+        )
 
-      core.debug(`creating / updating file at url ${remoteFileUrl}`)
-
-      await client.put(remoteFileUrl, {
-        pages: [
-          {
-            kind: 'document',
-            url: fileUrl,
-            title: fileUrl.replace(/-/g, ' '),
-            document: {
-              markdown: content
+        await client.post(`${syncUrl}${fileUrl}`, {
+          pages: [
+            {
+              kind: 'document',
+              url: fileUrl,
+              title: fileUrl.replace(/-/g, ' ')
             }
-          }
-        ]
-      })
+          ]
+        })
+      } else {
+        core.debug(`creating file`)
+
+        await client.put(syncUrl, {
+          pages: [
+            {
+              kind: 'document',
+              url: fileUrl,
+              title: fileUrl.replace(/-/g, ' '),
+              document: {
+                markdown: content
+              }
+            }
+          ]
+        })
+      }
     })
   )
   core.endGroup()
