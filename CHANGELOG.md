@@ -1,3 +1,12 @@
+## [1.0.3](https://github.com/mineko-io/action-gitbook-sync-dir/compare/v1.0.2...v1.0.3) (2020-09-29)
+
+
+### Bug Fixes
+
+* fixed handling of 404 errors of api ([4c5e8ab](https://github.com/mineko-io/action-gitbook-sync-dir/commit/4c5e8abf0d441f8d4c5fb64b7d00b723d7ed3ee8))
+
+
+
 ## [1.0.2](https://github.com/mineko-io/action-gitbook-sync-dir/compare/v1.0.1...v1.0.2) (2020-09-29)
 
 
