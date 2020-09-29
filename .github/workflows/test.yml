@@ -20,7 +20,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./
-        continue-on-error: true
         with:
           token: ${{ secrets.GITBOOK_TOKEN }}
           dir: 'doc/adrs'
