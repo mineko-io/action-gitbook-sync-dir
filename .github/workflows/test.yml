@@ -25,3 +25,4 @@ jobs:
           dir: 'doc/adrs'
           org: 'Mineko'
           space: 'Test'
+          group: 'ADRs'
