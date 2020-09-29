@@ -1,3 +1,12 @@
+## [1.0.10](https://github.com/mineko-io/action-gitbook-sync-dir/compare/v1.0.9...v1.0.10) (2020-09-29)
+
+
+### Bug Fixes
+
+* removed update of content as currently not supported ([5b42f50](https://github.com/mineko-io/action-gitbook-sync-dir/commit/5b42f50cfa4b1ba9f2e794d20c50264220945a32))
+
+
+
 ## [1.0.9](https://github.com/mineko-io/action-gitbook-sync-dir/compare/v1.0.8...v1.0.9) (2020-09-29)
 
 
@@ -32,15 +41,6 @@
 ### Bug Fixes
 
 * increased axios timeout ([f8ed03b](https://github.com/mineko-io/action-gitbook-sync-dir/commit/f8ed03b943517f2f0e60dff603d9291ac8d488ba))
-
-
-
-## [1.0.4](https://github.com/mineko-io/action-gitbook-sync-dir/compare/v1.0.3...v1.0.4) (2020-09-29)
-
-
-### Bug Fixes
-
-* page title ([ab3be70](https://github.com/mineko-io/action-gitbook-sync-dir/commit/ab3be7043a8c7ee2752427b93124e3503037a1c3))
 
 
 
