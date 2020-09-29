@@ -171,7 +171,11 @@ function sync(request) {
         if (group) {
             core.startGroup(`Checking if group ${group} exists`);
             const groupUrl = group === null || group === void 0 ? void 0 : group.toLowerCase();
-            let groupItem = yield client.get(`${syncUrl}${groupUrl}/`).catch(() => { });
+            let groupItem = yield client
+                .get(`${syncUrl}${groupUrl}/`)
+                .catch((err) => {
+                core.info(JSON.stringify(err));
+            });
             core.endGroup();
             if (!groupItem) {
                 core.startGroup(`Creating group ${group}`);
@@ -197,11 +201,10 @@ function sync(request) {
             const filePath = `${dir}/${file}`;
             const fileUrl = file.split('.')[0];
             const content = fs_1.default.readFileSync(filePath, { encoding: 'utf-8' }).toString();
-            core.info(`checking if file ${file} exists`);
+            core.info(`checking if file ${fileUrl} exists`);
             const existingFile = yield client
                 .get(`${syncUrl}${fileUrl}`)
                 .catch(() => { });
-            core.info(JSON.stringify(existingFile));
             if (existingFile && existingFile.uid) {
                 core.info('file exist, updating it...');
                 remoteFileUrl = `${syncUrl}${fileUrl}`;

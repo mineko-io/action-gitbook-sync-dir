@@ -100,7 +100,12 @@ export async function sync(request: SyncRequest): Promise<void> {
   if (group) {
     core.startGroup(`Checking if group ${group} exists`)
     const groupUrl = group?.toLowerCase()
-    let groupItem = await client.get(`${syncUrl}${groupUrl}/`).catch(() => {})
+
+    let groupItem = await client
+      .get(`${syncUrl}${groupUrl}/`)
+      .catch((err: any) => {
+        core.info(JSON.stringify(err))
+      })
     core.endGroup()
 
     if (!groupItem) {
@@ -131,12 +136,10 @@ export async function sync(request: SyncRequest): Promise<void> {
       const fileUrl = file.split('.')[0]
       const content = fs.readFileSync(filePath, {encoding: 'utf-8'}).toString()
 
-      core.info(`checking if file ${file} exists`)
+      core.info(`checking if file ${fileUrl} exists`)
       const existingFile = await client
         .get(`${syncUrl}${fileUrl}`)
         .catch(() => {})
-
-      core.info(JSON.stringify(existingFile))
 
       if (existingFile && existingFile.uid) {
         core.info('file exist, updating it...')
