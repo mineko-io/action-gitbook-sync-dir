@@ -402,8 +402,12 @@ test('synchronizes files and update existing ones', async () => {
   const expectation1 = mockyeah
     .post('v1/spaces/space-uid/content/v/master/url/foobargroup/001-file', {
       json: {
-        revision: '1'
-      }
+        error: {
+          status: 400,
+          message: 'content doesn changed'
+        }
+      },
+      status: 400
     })
     .expect({
       body: {

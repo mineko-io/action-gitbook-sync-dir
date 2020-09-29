@@ -236,7 +236,7 @@ function sync(request) {
                             title: fileUrl.replace(/-/g, ' ')
                         }
                     ]
-                });
+                }).catch(() => { });
             }
             else {
                 core.debug(`creating file`);

@@ -167,15 +167,17 @@ export async function sync(request: SyncRequest): Promise<void> {
           'file exist, updating title (update of content currently not supported) ...'
         )
 
-        await client.post(`${syncUrl}${fileUrl}`, {
-          pages: [
-            {
-              kind: 'document',
-              url: fileUrl,
-              title: fileUrl.replace(/-/g, ' ')
-            }
-          ]
-        })
+        await client
+          .post(`${syncUrl}${fileUrl}`, {
+            pages: [
+              {
+                kind: 'document',
+                url: fileUrl,
+                title: fileUrl.replace(/-/g, ' ')
+              }
+            ]
+          })
+          .catch(() => {})
       } else {
         core.debug(`creating file`)
 
