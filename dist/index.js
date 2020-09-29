@@ -219,7 +219,7 @@ function sync(request) {
             const existingFile = yield client
                 .get(`${syncUrl}${fileUrl}/`)
                 .then((res) => {
-                core.info(`fiel ${fileUrl} exists`);
+                core.info(`file ${fileUrl} exists`);
                 return res.data;
             })
                 .catch(() => {

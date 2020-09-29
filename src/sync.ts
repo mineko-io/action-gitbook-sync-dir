@@ -154,7 +154,7 @@ export async function sync(request: SyncRequest): Promise<void> {
       const existingFile = await client
         .get<Item>(`${syncUrl}${fileUrl}/`)
         .then((res: AxiosResponse<Item>) => {
-          core.info(`fiel ${fileUrl} exists`)
+          core.info(`file ${fileUrl} exists`)
           return res.data
         })
         .catch(() => {
