@@ -1,3 +1,12 @@
+## [1.0.6](https://github.com/mineko-io/action-gitbook-sync-dir/compare/v1.0.5...v1.0.6) (2020-09-29)
+
+
+### Bug Fixes
+
+* added build assets ([2902241](https://github.com/mineko-io/action-gitbook-sync-dir/commit/29022411c65fcaabf64d9a4d51b2fd0ca8c940d5))
+
+
+
 ## [1.0.5](https://github.com/mineko-io/action-gitbook-sync-dir/compare/v1.0.4...v1.0.5) (2020-09-29)
 
 
@@ -31,15 +40,6 @@
 ### Bug Fixes
 
 * fixed build asset ([ec630a8](https://github.com/mineko-io/action-gitbook-sync-dir/commit/ec630a87a25dc6ace4e0aab246259a15d224b117))
-
-
-
-## [1.0.1](https://github.com/mineko-io/action-gitbook-sync-dir/compare/v1.0.0...v1.0.1) (2020-09-29)
-
-
-### Bug Fixes
-
-* added output groups ([1cb2561](https://github.com/mineko-io/action-gitbook-sync-dir/commit/1cb2561cb65bdf62a0d626561de0d3fe70621258))
 
 
 

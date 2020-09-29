@@ -217,13 +217,15 @@ function sync(request) {
             const content = fs_1.default.readFileSync(filePath, { encoding: 'utf-8' }).toString();
             core.info(`checking if file ${fileUrl} exists`);
             const existingFile = yield client
-                .get(`${syncUrl}${fileUrl}`)
+                .get(`${syncUrl}${fileUrl}/`)
                 .then((res) => {
                 core.info(`fiel ${fileUrl} exists`);
                 return res.data;
             })
-                .catch(() => {
+                .catch((err) => {
+                core.info(`${syncUrl}${fileUrl}`);
                 core.info(`file ${fileUrl} doesn't exists`);
+                core.info(JSON.stringify(err));
             });
             if (existingFile && existingFile.uid) {
                 core.info('file exist, updating it...');

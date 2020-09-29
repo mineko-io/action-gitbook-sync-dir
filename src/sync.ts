@@ -152,12 +152,12 @@ export async function sync(request: SyncRequest): Promise<void> {
 
       core.info(`checking if file ${fileUrl} exists`)
       const existingFile = await client
-        .get<Item>(`${syncUrl}${fileUrl}`)
+        .get<Item>(`${syncUrl}${fileUrl}/`)
         .then((res: AxiosResponse<Item>) => {
           core.info(`fiel ${fileUrl} exists`)
           return res.data
         })
-        .catch(() => {
+        .catch((err: any) => {
           core.info(`file ${fileUrl} doesn't exists`)
         })
 
