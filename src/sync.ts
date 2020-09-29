@@ -1,4 +1,4 @@
-import GitBookAPI from 'gitbook-api'
+import axios, {AxiosInstance, AxiosResponse} from 'axios'
 import * as core from '@actions/core'
 import fs from 'fs'
 
@@ -23,20 +23,23 @@ interface Space extends Item {
   name: string
 }
 
-interface Client {
-  get: Function
+interface Request<T> {
+  items: T[]
 }
 
 async function getOrganziation(
-  client: Client,
+  client: AxiosInstance,
   org: string
 ): Promise<Organization> {
   core.startGroup('Requesting organizations')
 
   const error = new Error(`No organization found`)
-  const organizations = await client.get('orgs').catch(() => {
-    throw error
-  })
+  const organizations = await client
+    .get<Request<Organization>>('orgs')
+    .then((res: AxiosResponse<Request<Organization>>) => res.data)
+    .catch(() => {
+      throw error
+    })
 
   if (
     !organizations ||
@@ -46,7 +49,7 @@ async function getOrganziation(
     throw error
   }
 
-  const orgItem: Organization = organizations.items.find(
+  const orgItem: Organization | undefined = organizations.items.find(
     (item: {title: string}) => item.title === org
   )
 
@@ -60,21 +63,24 @@ async function getOrganziation(
 }
 
 async function getSpace(
-  client: Client,
+  client: AxiosInstance,
   space: string,
   org: Organization
 ): Promise<Space> {
   core.startGroup(`Requesting spaces for org ${org.title}`)
   const error = new Error('No spaces found')
-  const spaces = await client.get(`owners/${org.uid}/spaces`).catch(() => {
-    throw error
-  })
+  const spaces = await client
+    .get<Request<Space>>(`owners/${org.uid}/spaces`)
+    .then((res: AxiosResponse<Request<Space>>) => res.data)
+    .catch(() => {
+      throw error
+    })
 
   if (!spaces || !spaces.items || spaces.items.length === 0) {
     throw error
   }
 
-  const spaceItem: Space = spaces.items.find(
+  const spaceItem: Space | undefined = spaces.items.find(
     (item: {name: string}) => item.name === space
   )
 
@@ -88,7 +94,11 @@ async function getSpace(
 
 export async function sync(request: SyncRequest): Promise<void> {
   const {token, dir, org, space, apiEndpoint, group} = request
-  const client = new GitBookAPI({token}, {host: apiEndpoint})
+  const client = axios.create({
+    baseURL: apiEndpoint,
+    timeout: 1000,
+    headers: {Authorization: `Bearer ${token}`}
+  })
 
   const orgItem = await getOrganziation(client, org)
   const spaceItem = await getSpace(client, space, orgItem)
@@ -98,13 +108,17 @@ export async function sync(request: SyncRequest): Promise<void> {
   core.endGroup()
 
   if (group) {
-    core.startGroup(`Checking if group ${group} exists`)
+    core.startGroup(`checking if group ${group} exists`)
     const groupUrl = group?.toLowerCase()
 
     let groupItem = await client
-      .get(`${syncUrl}${groupUrl}/`)
-      .catch((err: any) => {
-        core.info(JSON.stringify(err))
+      .get<Item>(`${syncUrl}${groupUrl}/`)
+      .then((res: AxiosResponse<Item>) => {
+        core.info(`group ${group} exist`)
+        return res.data
+      })
+      .catch(() => {
+        core.info(`group ${group} doesn't exist`)
       })
     core.endGroup()
 
@@ -138,8 +152,14 @@ export async function sync(request: SyncRequest): Promise<void> {
 
       core.info(`checking if file ${fileUrl} exists`)
       const existingFile = await client
-        .get(`${syncUrl}${fileUrl}`)
-        .catch(() => {})
+        .get<Item>(`${syncUrl}${fileUrl}`)
+        .then((res: AxiosResponse<Item>) => {
+          core.info(`fiel ${fileUrl} exists`)
+          return res.data
+        })
+        .catch(() => {
+          core.info(`file ${fileUrl} doesn't exists`)
+        })
 
       if (existingFile && existingFile.uid) {
         core.info('file exist, updating it...')
