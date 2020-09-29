@@ -22,7 +22,7 @@ jobs:
       - uses: ./
         continue-on-error: true
         with:
-          token: 'my-test-token'
+          token: ${{ secrets.GITBOOK_TOKEN }}
           dir: 'doc/adrs'
-          org: 'mineko'
-          space: 'foo-bar'
+          org: 'Mineko'
+          space: 'Test'
