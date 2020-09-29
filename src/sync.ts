@@ -136,6 +136,8 @@ export async function sync(request: SyncRequest): Promise<void> {
         .get(`${syncUrl}${fileUrl}`)
         .catch(() => {})
 
+      core.info(JSON.stringify(existingFile))
+
       if (existingFile && existingFile.uid) {
         core.info('file exist, updating it...')
         remoteFileUrl = `${syncUrl}${fileUrl}`
