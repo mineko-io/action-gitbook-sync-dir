@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: mineko-io/action-gitbook-sync-dir@v1
+      - uses: mineko-io/action-gitbook-sync-dir@v1.0.8
         with:
           token: ${{ secret.GITBOOK_TOKEN }}
           dir: doc/adrs
