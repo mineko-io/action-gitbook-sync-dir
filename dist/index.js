@@ -171,7 +171,7 @@ function sync(request) {
         const { token, dir, org, space, apiEndpoint, group } = request;
         const client = axios_1.default.create({
             baseURL: apiEndpoint,
-            timeout: 1000,
+            timeout: 10000,
             headers: { Authorization: `Bearer ${token}` }
         });
         const orgItem = yield getOrganziation(client, org);
