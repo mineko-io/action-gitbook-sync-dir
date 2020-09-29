@@ -1,3 +1,12 @@
+## [1.0.11](https://github.com/mineko-io/action-gitbook-sync-dir/compare/v1.0.10...v1.0.11) (2020-09-29)
+
+
+### Bug Fixes
+
+* catch error on update as api throws error if content is the same ([b40cc7c](https://github.com/mineko-io/action-gitbook-sync-dir/commit/b40cc7c081c25c3502e06ce0dfdfb5aa2164d53d))
+
+
+
 ## [1.0.10](https://github.com/mineko-io/action-gitbook-sync-dir/compare/v1.0.9...v1.0.10) (2020-09-29)
 
 
@@ -32,15 +41,6 @@
 
 * added build assets ([2902241](https://github.com/mineko-io/action-gitbook-sync-dir/commit/29022411c65fcaabf64d9a4d51b2fd0ca8c940d5))
 * fixed request to check if file exists ([b40a0fe](https://github.com/mineko-io/action-gitbook-sync-dir/commit/b40a0fe76c6918592ee6d9e4d8790df3753c0400))
-
-
-
-## [1.0.5](https://github.com/mineko-io/action-gitbook-sync-dir/compare/v1.0.4...v1.0.5) (2020-09-29)
-
-
-### Bug Fixes
-
-* increased axios timeout ([f8ed03b](https://github.com/mineko-io/action-gitbook-sync-dir/commit/f8ed03b943517f2f0e60dff603d9291ac8d488ba))
 
 
 
