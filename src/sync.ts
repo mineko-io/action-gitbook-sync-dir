@@ -148,7 +148,7 @@ export async function sync(request: SyncRequest): Promise<void> {
           {
             kind: 'document',
             url: fileUrl,
-            title: fileUrl.replace('-', ' '),
+            title: fileUrl.replace(/-/g, ' '),
             document: {
               markdown: content
             }
