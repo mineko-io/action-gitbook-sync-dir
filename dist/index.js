@@ -121,16 +121,17 @@ exports.sync = void 0;
 const gitbook_api_1 = __importDefault(__webpack_require__(2235));
 const core = __importStar(__webpack_require__(2186));
 const fs_1 = __importDefault(__webpack_require__(5747));
-function sync(request) {
+function getOrganziation(client, org) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { token, dir, org, space, apiEndpoint, group } = request;
-        const client = new gitbook_api_1.default({ token }, { host: apiEndpoint });
         core.startGroup('Requesting organizations');
-        const organizations = yield client.get('orgs');
+        const error = new Error(`No organization found`);
+        const organizations = yield client.get('orgs').catch(() => {
+            throw error;
+        });
         if (!organizations ||
             !organizations.items ||
             organizations.items.length === 0) {
-            throw new Error(`No organization found`);
+            throw error;
         }
         const orgItem = organizations.items.find((item) => item.title === org);
         if (!orgItem) {
@@ -138,23 +139,41 @@ function sync(request) {
         }
         core.info(`Organization with title ${org} found.`);
         core.endGroup();
-        core.startGroup(`Requesting spaces for org ${org}`);
-        const spaces = yield client.get(`owners/${orgItem.uid}/spaces`);
+        return orgItem;
+    });
+}
+function getSpace(client, space, org) {
+    return __awaiter(this, void 0, void 0, function* () {
+        core.startGroup(`Requesting spaces for org ${org.title}`);
+        const error = new Error('No spaces found');
+        const spaces = yield client.get(`owners/${org.uid}/spaces`).catch(() => {
+            throw error;
+        });
         if (!spaces || !spaces.items || spaces.items.length === 0) {
-            throw new Error('No spaces found');
+            throw error;
         }
         const spaceItem = spaces.items.find((item) => item.name === space);
         if (!spaceItem) {
             throw new Error(`No space with name ${space} found`);
         }
+        core.info(`Space with name ${space} found.`);
+        return spaceItem;
+    });
+}
+function sync(request) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { token, dir, org, space, apiEndpoint, group } = request;
+        const client = new gitbook_api_1.default({ token }, { host: apiEndpoint });
+        const orgItem = yield getOrganziation(client, org);
+        const spaceItem = yield getSpace(client, space, orgItem);
         let syncUrl = `spaces/${spaceItem.uid}/content/v/master/url/`;
         core.endGroup();
         if (group) {
             core.startGroup(`Checking if group ${group} exists`);
             const groupUrl = group === null || group === void 0 ? void 0 : group.toLowerCase();
-            let groupItem = yield client.get(`${syncUrl}${groupUrl}/`);
+            let groupItem = yield client.get(`${syncUrl}${groupUrl}/`).catch(() => { });
             core.endGroup();
-            if (!groupItem || groupItem.error) {
+            if (!groupItem) {
                 core.startGroup(`Creating group ${group}`);
                 groupItem = yield client.put(syncUrl, {
                     pages: [
@@ -179,7 +198,9 @@ function sync(request) {
             const fileUrl = file.split('.')[0];
             const content = fs_1.default.readFileSync(filePath, { encoding: 'utf-8' }).toString();
             core.info(`checking if file ${file} exists`);
-            const existingFile = yield client.get(`${syncUrl}${fileUrl}`);
+            const existingFile = yield client
+                .get(`${syncUrl}${fileUrl}`)
+                .catch(() => { });
             if (existingFile && existingFile.uid) {
                 core.info('file exist, updating it...');
                 remoteFileUrl = `${syncUrl}${fileUrl}`;

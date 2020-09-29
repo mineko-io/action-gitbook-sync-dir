@@ -47,6 +47,22 @@ test('token is set to header', async () =>
     .run(sync(getCurrentSyncRequest()).catch(() => {})) // eslint-disable-line github/no-then
     .verify())
 
+test('throws error if no organization was found', async () => {
+  await mockyeah.get('v1/orgs', {
+    json: {
+      error: {
+        status: 404,
+        message: 'Not Found'
+      }
+    },
+    status: 404
+  })
+
+  await expect(sync(getCurrentSyncRequest())).rejects.toThrow(
+    'No organization found'
+  )
+})
+
 test('throws error if no organization in response', async () => {
   await mockyeah.get('v1/orgs', {
     json: {
@@ -71,7 +87,7 @@ test('throws error if no organization with given title exist', async () => {
   )
 })
 
-test('throws error if no spaces found', async () => {
+test('throws error if no spaces are in response', async () => {
   mockyeah.get('v1/orgs', {
     json: {
       items: [mockedOrganization]
@@ -81,6 +97,25 @@ test('throws error if no spaces found', async () => {
     json: {
       items: []
     }
+  })
+
+  await expect(sync(getCurrentSyncRequest())).rejects.toThrow('No spaces found')
+})
+
+test('throws error if no spaces found', async () => {
+  mockyeah.get('v1/orgs', {
+    json: {
+      items: [mockedOrganization]
+    }
+  })
+  mockyeah.get('v1/owners/org-uid/spaces', {
+    json: {
+      error: {
+        status: 404,
+        message: 'Not Found'
+      }
+    },
+    status: 404
   })
 
   await expect(sync(getCurrentSyncRequest())).rejects.toThrow('No spaces found')
@@ -117,9 +152,11 @@ test('creates group in space if group input is set', async () => {
   mockyeah.get('v1/spaces/space-uid/content/v/master/url/foobargroup/', {
     json: {
       error: {
-        status: 404
+        status: 404,
+        message: 'Not Found'
       }
-    }
+    },
+    status: 404
   })
 
   return mockyeah
@@ -236,7 +273,8 @@ test('synchronizes files in dir sorted to gitbook under group path', async () =>
       error: {
         status: 404
       }
-    }
+    },
+    status: 404
   })
   mockyeah.put('v1/spaces/space-uid/content/v/master/url/', {
     json: {
@@ -250,7 +288,8 @@ test('synchronizes files in dir sorted to gitbook under group path', async () =>
         error: {
           status: 404
         }
-      }
+      },
+      status: 404
     }
   )
   mockyeah.get(
@@ -260,7 +299,8 @@ test('synchronizes files in dir sorted to gitbook under group path', async () =>
         error: {
           status: 404
         }
-      }
+      },
+      status: 404
     }
   )
   ;(fs.readdirSync as jest.Mock).mockReturnValue(['002-file.md', '001-file.md'])
@@ -325,7 +365,8 @@ test('synchronizes files and update existing ones', async () => {
     json: {
       error: {
         status: 404
-      }
+      },
+      status: 404
     }
   })
 
@@ -353,7 +394,8 @@ test('synchronizes files and update existing ones', async () => {
         error: {
           status: 404
         }
-      }
+      },
+      status: 404
     }
   )
 
