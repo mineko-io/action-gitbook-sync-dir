@@ -10,7 +10,7 @@ export async function run(): Promise<void> {
     const apiEndpoint: string = core.getInput('apiEndpoint', {required: true})
     const group: string = core.getInput('group')
 
-    core.debug(`Syncing ${dir} to space ${space} ...`)
+    core.info(`Syncing ${dir} to space ${space} ...`)
 
     await sync({
       token,
