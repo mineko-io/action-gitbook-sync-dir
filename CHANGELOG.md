@@ -1,3 +1,12 @@
+## [1.0.4](https://github.com/mineko-io/action-gitbook-sync-dir/compare/v1.0.3...v1.0.4) (2020-09-29)
+
+
+### Bug Fixes
+
+* page title ([ab3be70](https://github.com/mineko-io/action-gitbook-sync-dir/commit/ab3be7043a8c7ee2752427b93124e3503037a1c3))
+
+
+
 ## [1.0.3](https://github.com/mineko-io/action-gitbook-sync-dir/compare/v1.0.2...v1.0.3) (2020-09-29)
 
 
