@@ -21,8 +21,8 @@ jobs:
         with:
           token: ${{ secret.GITBOOK_TOKEN }}
           dir: doc/adrs
-          org: mineko
-          space: foo-bar
+          org: Mineko
+          space: Foo Bar
           group: ADRs
           apiEndpoint: https://api-beta.gitbook.com/v1
 ```
