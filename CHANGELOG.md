@@ -1,3 +1,12 @@
+## [1.0.2](https://github.com/mineko-io/action-gitbook-sync-dir/compare/v1.0.1...v1.0.2) (2020-09-29)
+
+
+### Bug Fixes
+
+* fixed build asset ([ec630a8](https://github.com/mineko-io/action-gitbook-sync-dir/commit/ec630a87a25dc6ace4e0aab246259a15d224b117))
+
+
+
 ## [1.0.1](https://github.com/mineko-io/action-gitbook-sync-dir/compare/v1.0.0...v1.0.1) (2020-09-29)
 
 
