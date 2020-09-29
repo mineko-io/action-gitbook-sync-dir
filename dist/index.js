@@ -58,9 +58,9 @@ function run() {
             const dir = core.getInput('dir', { required: true });
             const org = core.getInput('org', { required: true });
             const space = core.getInput('space', { required: true });
-            const apiEndpoint = core.getInput('apiEndpoint');
+            const apiEndpoint = core.getInput('apiEndpoint', { required: true });
             const group = core.getInput('group');
-            core.debug(`Syncing ${dir} to space ${space} ...`);
+            core.info(`Syncing ${dir} to space ${space} ...`);
             yield sync_1.sync({
                 token,
                 dir,
@@ -85,6 +85,25 @@ exports.run = run;
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -100,11 +119,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.sync = void 0;
 const gitbook_api_1 = __importDefault(__webpack_require__(2235));
+const core = __importStar(__webpack_require__(2186));
 const fs_1 = __importDefault(__webpack_require__(5747));
 function sync(request) {
     return __awaiter(this, void 0, void 0, function* () {
         const { token, dir, org, space, apiEndpoint, group } = request;
-        const client = new gitbook_api_1.default({ token }, { host: apiEndpoint || 'https://api-beta.gitbook.com/v1' });
+        const client = new gitbook_api_1.default({ token }, { host: apiEndpoint });
+        core.startGroup('Requesting organizations');
         const organizations = yield client.get('orgs');
         if (!organizations ||
             !organizations.items ||
@@ -115,6 +136,9 @@ function sync(request) {
         if (!orgItem) {
             throw new Error(`No organization with title ${org} found`);
         }
+        core.info(`Organization with title ${org} found.`);
+        core.endGroup();
+        core.startGroup(`Requesting spaces for org ${org}`);
         const spaces = yield client.get(`owners/${orgItem.uid}/spaces`);
         if (!spaces || !spaces.items || spaces.items.length === 0) {
             throw new Error('No spaces found');
@@ -124,10 +148,14 @@ function sync(request) {
             throw new Error(`No space with name ${space} found`);
         }
         let syncUrl = `spaces/${spaceItem.uid}/content/v/master/url/`;
+        core.endGroup();
         if (group) {
+            core.startGroup(`Checking if group ${group} exists`);
             const groupUrl = group === null || group === void 0 ? void 0 : group.toLowerCase();
             let groupItem = yield client.get(`${syncUrl}${groupUrl}/`);
+            core.endGroup();
             if (!groupItem || groupItem.error) {
+                core.startGroup(`Creating group ${group}`);
                 groupItem = yield client.put(syncUrl, {
                     pages: [
                         {
@@ -137,20 +165,26 @@ function sync(request) {
                         }
                     ]
                 });
+                core.endGroup();
             }
             syncUrl = `${syncUrl}${groupUrl}/`;
         }
+        core.startGroup(`Synchronizing files of dir ${dir}`);
         const files = fs_1.default.readdirSync(dir) || [];
         files.sort();
         yield Promise.all(files.map((file) => __awaiter(this, void 0, void 0, function* () {
+            core.info(`start sync of file ${file}`);
             let remoteFileUrl = syncUrl;
             const filePath = `${dir}/${file}`;
             const fileUrl = file.split('.')[0];
             const content = fs_1.default.readFileSync(filePath, { encoding: 'utf-8' }).toString();
+            core.info(`checking if file ${file} exists`);
             const existingFile = yield client.get(`${syncUrl}${fileUrl}`);
             if (existingFile && existingFile.uid) {
+                core.info('file exist, updating it...');
                 remoteFileUrl = `${syncUrl}${fileUrl}`;
             }
+            core.debug(`creating / updating file at url ${remoteFileUrl}`);
             yield client.put(remoteFileUrl, {
                 pages: [
                     {
@@ -164,6 +198,7 @@ function sync(request) {
                 ]
             });
         })));
+        core.endGroup();
     });
 }
 exports.sync = sync;
