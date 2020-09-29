@@ -222,10 +222,8 @@ function sync(request) {
                 core.info(`fiel ${fileUrl} exists`);
                 return res.data;
             })
-                .catch((err) => {
-                core.info(`${syncUrl}${fileUrl}`);
+                .catch(() => {
                 core.info(`file ${fileUrl} doesn't exists`);
-                core.info(JSON.stringify(err));
             });
             if (existingFile && existingFile.uid) {
                 core.info('file exist, updating it...');

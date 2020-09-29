@@ -157,7 +157,7 @@ export async function sync(request: SyncRequest): Promise<void> {
           core.info(`fiel ${fileUrl} exists`)
           return res.data
         })
-        .catch((err: any) => {
+        .catch(() => {
           core.info(`file ${fileUrl} doesn't exists`)
         })
 
