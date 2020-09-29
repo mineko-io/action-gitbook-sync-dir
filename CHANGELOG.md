@@ -1,9 +1,10 @@
-## [1.0.6](https://github.com/mineko-io/action-gitbook-sync-dir/compare/v1.0.5...v1.0.6) (2020-09-29)
+## [1.0.7](https://github.com/mineko-io/action-gitbook-sync-dir/compare/v1.0.5...v1.0.7) (2020-09-29)
 
 
 ### Bug Fixes
 
 * added build assets ([2902241](https://github.com/mineko-io/action-gitbook-sync-dir/commit/29022411c65fcaabf64d9a4d51b2fd0ca8c940d5))
+* fixed request to check if file exists ([b40a0fe](https://github.com/mineko-io/action-gitbook-sync-dir/commit/b40a0fe76c6918592ee6d9e4d8790df3753c0400))
 
 
 

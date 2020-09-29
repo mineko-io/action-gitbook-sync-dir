@@ -1,6 +1,6 @@
 {
   "name": "@mineko-io/action-gitbook-sync-dir",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "private": true,
   "description": "Github Action to synchronize a repository directory to Gitbook",
   "main": "lib/main.js",
