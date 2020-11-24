@@ -163,9 +163,7 @@ export async function sync(request: SyncRequest): Promise<void> {
         })
 
       if (existingFile && existingFile.uid) {
-        core.info(
-          'file exist, updating title (update of content currently not supported) ...'
-        )
+        core.info('file exist, updating title and content ...')
 
         await client
           .post(`${syncUrl}${fileUrl}`, {
@@ -173,7 +171,17 @@ export async function sync(request: SyncRequest): Promise<void> {
               {
                 kind: 'document',
                 url: fileUrl,
-                title: fileUrl.replace(/-/g, ' ')
+                title: fileUrl.replace(/-/g, ' '),
+                document: {
+                  transforms: [
+                    {
+                      transform: 'replace',
+                      fragment: {
+                        markdown: content
+                      }
+                    }
+                  ]
+                }
               }
             ]
           })

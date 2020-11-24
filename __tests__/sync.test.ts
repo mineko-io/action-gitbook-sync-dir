@@ -415,7 +415,17 @@ test('synchronizes files and update existing ones', async () => {
           {
             kind: 'document',
             url: '001-file',
-            title: '001 file'
+            title: '001 file',
+            document: {
+              transforms: [
+                {
+                  transform: 'replace',
+                  fragment: {
+                    markdown: 'content'
+                  }
+                }
+              ]
+            }
           }
         ]
       }
