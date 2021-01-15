@@ -31,7 +31,7 @@
     "@mockyeah/test-jest": "^1.0.3",
     "@mockyeah/test-server-jest": "^1.0.3",
     "@types/jest": "^26.0.15",
-    "@types/node": "^14.14.9",
+    "@types/node": "^14.14.21",
     "@typescript-eslint/parser": "^4.8.2",
     "@vercel/ncc": "^0.25.1",
     "eslint": "^7.14.0",
